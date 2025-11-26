@@ -6,10 +6,12 @@ import (
 	"github.com/Nevitash/gobsidian-master/public/configuration"
 )
 
-var config *configuration.Config
+const (
+	DEFAULT_PATH_CONFIG = "./resources/config.yaml"
+)
 
 func GetConfig() *configuration.Config {
-	return config
+	return configuration.GetConfig()
 }
 
 func InitConfig(configPath string) (*configuration.Config, error) {
@@ -24,5 +26,12 @@ func InitConfig(configPath string) (*configuration.Config, error) {
 		return nil, err
 	}
 	log.Printf("Config loaded: %+v", config)
+	configuration.SetConfig(config)
 	return config, nil
+}
+
+func init() {
+	if _, err := InitConfig(DEFAULT_PATH_CONFIG); err != nil {
+		panic(err)
+	}
 }
