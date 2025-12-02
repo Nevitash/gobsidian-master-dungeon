@@ -37,7 +37,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.20' # Or your desired Go version
+        go-version: '1.25' # Or your desired Go version
 
     # ----------------------------------------
     # 1. Build the Executable for the Target OS
