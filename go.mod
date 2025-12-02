@@ -8,7 +8,7 @@ require (
 )
 
 require (
-	github.com/Nevitash/gobsidian-master v1.0.0 // indirect
+	github.com/Nevitash/gobsidian-master v1.0.1 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect

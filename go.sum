@@ -2,6 +2,8 @@ github.com/Nevitash/gobsidian-master v0.0.0-20251202101819-ba5d7f7c6963 h1:DG+as
 github.com/Nevitash/gobsidian-master v0.0.0-20251202101819-ba5d7f7c6963/go.mod h1:ygPDWV/w2bg0m6riwnmSiqcq+RLL2jNSyEx2cGAGhKM=
 github.com/Nevitash/gobsidian-master v1.0.0 h1:DemN+lvHqiJ1iQZmyHxyFeuduYN1733LxltynOJ/iXs=
 github.com/Nevitash/gobsidian-master v1.0.0/go.mod h1:ygPDWV/w2bg0m6riwnmSiqcq+RLL2jNSyEx2cGAGhKM=
+github.com/Nevitash/gobsidian-master v1.0.1 h1:oR3rGZtEdvr1jWX6UmpujOEp/dQAM3l0F7aP8CRgUGY=
+github.com/Nevitash/gobsidian-master v1.0.1/go.mod h1:ygPDWV/w2bg0m6riwnmSiqcq+RLL2jNSyEx2cGAGhKM=
 github.com/cpuguy83/go-md2man/v2 v2.0.6/go.mod h1:oOW0eioCTA6cOiMLiUPZOpcVxMig6NIQQ7OS05n1F4g=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
