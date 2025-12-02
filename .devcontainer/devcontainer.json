@@ -11,6 +11,13 @@
 			"version": "latest",
 			"golangciLintVersion": "latest"
 		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"twpayne.vscode-testscript"
+			]
+		}
 	}
 
 	// 👇 Use 'forwardPorts' to make a list of ports inside the container available locally.
