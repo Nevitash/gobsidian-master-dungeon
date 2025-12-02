@@ -49,7 +49,7 @@ jobs:
         GOARCH: ${{ matrix.GOARCH }}
       run: |
         # UPDATED: Use the new executable name in the build command
-        go build -o ${{ matrix.executable }} ./cmd/myapp
+        go build -o ${{ matrix.executable }} .
 
     # ----------------------------------------
     # 2. Upload the OS-Specific Artifact
