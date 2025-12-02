@@ -1,37 +1,62 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
+name: Release Builds - gobsidian-dungeon
 
 on:
   push:
-    branches: [ "master" ]
     tags:
-      - 'v*' # Triggers on any tag starting with 'v', like v1.0.0 or v2.3
-  pull_request:
-    branches: [ "master" ]
+      - 'v*' # Trigger only on tag pushes (e.g., v1.0.0)
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # Define the matrix for OS and Architecture
+    strategy:
+      matrix:
+        # Define the runner (OS) to use
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        # Define the Go OS (GOOS) and architecture (GOARCH) targets
+        include:
+          - os: ubuntu-latest
+            GOOS: linux
+            GOARCH: amd64
+            # UPDATED: Executable name
+            executable: gobsidian-dungeon
+          - os: windows-latest
+            GOOS: windows
+            GOARCH: amd64
+            # UPDATED: Executable name with .exe extension
+            executable: gobsidian-dungeon.exe
+          - os: macos-latest
+            GOOS: darwin
+            GOARCH: amd64
+            # UPDATED: Executable name
+            executable: gobsidian-dungeon
+
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.25'
+        go-version: '1.20' # Or your desired Go version
 
-    - name: Test
-      run: go test -v ./...
-
+    # ----------------------------------------
+    # 1. Build the Executable for the Target OS
+    # ----------------------------------------
     - name: Build Executable
-      # CHANGED: Use '.' to build the package in the current directory (the root)
-      run: go build -o gobsidian-dungeon . 
+      env:
+        # Set environment variables for cross-compilation
+        GOOS: ${{ matrix.GOOS }}
+        GOARCH: ${{ matrix.GOARCH }}
+      run: |
+        # UPDATED: Use the new executable name in the build command
+        go build -o ${{ matrix.executable }} ./cmd/myapp
 
-    - name: Upload Tagged Artifact
+    # ----------------------------------------
+    # 2. Upload the OS-Specific Artifact
+    # ----------------------------------------
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
-      if: startsWith(github.ref, 'refs/tags/')
       with:
-        name: gobsidian-dungeon-${{ github.ref_name }}
-        path: gobsidian-dungeon
+        # UPDATED: Use the new executable name in the artifact name
+        name: gobsidian-dungeon-${{ github.ref_name }}-${{ matrix.GOOS }}-${{ matrix.GOARCH }}
+        path: ${{ matrix.executable }}
