@@ -1,0 +1,56 @@
+mkdir vault
+mkdir vault/notes
+mkdir vault/notes/characters
+mkdir vault/notes/locations
+mkdir vault/notes/items
+
+exec root --vault ./vault --output ./merged-vault.md --include-file-patterns *.md --exclude-file-patterns *.png,*.jpg -t ./template.md
+
+exists ./merged-vault.md 
+cmp ./golden_file.md ./merged-vault.md
+
+-- golden_file.md --
+---
+# vault/notes/characters/alice.md
+---
+## Alice
+A brave adventurer.
+---
+---
+# vault/notes/locations/forest.md
+---
+## Enchanted Forest
+A mysterious forest filled with magical creatures.
+---
+---
+# vault/notes/story.md
+---
+## The Great Adventure
+Once upon a time, Alice ventured into the Enchanted Forest.
+### The End
+All live happy
+---
+
+-- vault/_config/config.yaml --
+# should be ignored
+some_setting: true
+-- vault/notes/characters/alice.md --
+# Alice
+A brave adventurer.
+-- vault/notes/locations/forest.md --
+# Enchanted Forest
+A mysterious forest filled with magical creatures.
+-- vault/notes/story.md --
+# The Great Adventure
+Once upon a time, Alice ventured into the Enchanted Forest.
+## The End
+All live happy
+-- vault/notes/items/sword.png --
+(binary content)
+-- template.md --
+{{range .Files}}---
+# {{.Path}}
+---
+{{.GetContent -}}
+---
+{{end}}

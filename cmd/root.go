@@ -4,15 +4,25 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"os"
+	"text/template"
 
-	"github.com/Nevitash/gobsidian-master-dungeon/config"
-	"github.com/Nevitash/gobsidian-master/public/file"
+	"github.com/Nevitash/gobsidian-master/configuration"
+	publicConfig "github.com/Nevitash/gobsidian-master/public/configuration"
+	"github.com/Nevitash/gobsidian-master/public/vault"
 	"github.com/spf13/cobra"
 )
 
 var (
-	outputFilePath string
+	outputFilePath      string
+	vaultPath           string
+	includeFilePatterns []string
+	excludeFilePatterns []string
+	includePathPatterns []string
+	excludePathPatterns []string
+	prefixHeadings      bool
+	templatePath        string
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -32,7 +42,6 @@ func Execute() {
 }
 
 func init() {
-	config := config.GetConfig()
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
@@ -41,20 +50,38 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().StringVarP(&config.VaultPath, "vault", "v", "./", "Path to the Obsidian vault")
+	rootCmd.Flags().StringVarP(&vaultPath, "vault", "v", "./", "Path to the Obsidian vault")
 	rootCmd.Flags().StringVarP(&outputFilePath, "output", "o", "./merged-vault.md", "Output file name for the merged markdown")
-	rootCmd.Flags().StringArrayVar(&config.IncludeFilePatterns, "include-file-patters", []string{"*.md", "*.txt"}, "Glob patterns for files to include")
-	rootCmd.Flags().StringArrayVar(&config.ExcludeFilePatterns, "exclude-file-patterns", []string{"*.png", "*.jpg"}, "Glob patterns for files to exclude")
-	rootCmd.Flags().BoolVarP(&config.Flags.PrefixHeadings, "prefix-headings", "p", true, "Prefix headings inside files with an extra #")
-	rootCmd.Flags().StringArrayVar(&config.IncludePathPatterns, "include-path-patterns", []string{}, "Glob patterns for paths to include")
-	rootCmd.Flags().StringArrayVar(&config.ExcludePathPatterns, "exclude-path-patterns", []string{"**/_*", "**/.*"}, "Glob patterns for paths to exclude")
+	rootCmd.Flags().StringArrayVar(&includeFilePatterns, "include-file-patterns", []string{}, "Glob patterns for files to include")
+	rootCmd.Flags().StringArrayVar(&excludeFilePatterns, "exclude-file-patterns", []string{"*.png", "*.jpg"}, "Glob patterns for files to exclude")
+	rootCmd.Flags().BoolVarP(&prefixHeadings, "prefix-headings", "p", true, "Prefix headings inside files with an extra #")
+	rootCmd.Flags().StringArrayVar(&includePathPatterns, "include-path-patterns", []string{}, "Glob patterns for paths to include")
+	rootCmd.Flags().StringArrayVar(&excludePathPatterns, "exclude-path-patterns", []string{}, "Glob patterns for paths to exclude")
+	rootCmd.Flags().StringVarP(&templatePath, "template-path", "t", "", "Path to custom templates for rendering")
 }
 
 func mergeVault(cmd *cobra.Command, args []string) {
-	config := config.GetConfig()
-	vault, err := file.LoadVaultFile(outputFilePath, config)
-	if err != nil {
-		panic(err)
+	var template *template.Template = nil
+	var err error
+	if templatePath != "" {
+		template, err = publicConfig.LoadTemplateFromFile(templatePath)
+		if err != nil {
+			fmt.Printf("Error loading template from %s: %v\n", templatePath, err)
+			return
+		}
 	}
-	file.CombineVault(vault, config)
+	config, err := vault.CreateConfig(vaultPath,
+		includeFilePatterns,
+		excludeFilePatterns,
+		includePathPatterns,
+		excludePathPatterns,
+		&configuration.Flags{PrefixHeadings: prefixHeadings},
+		template)
+	if err != nil {
+		fmt.Printf("Error creating vault config: %v\n", err)
+		return
+	}
+	fmt.Printf("Config %+v\n", config)
+	vault.MergeToFileWithConfig(outputFilePath, config)
+	fmt.Printf("Merged vault written to %s\n", outputFilePath)
 }
