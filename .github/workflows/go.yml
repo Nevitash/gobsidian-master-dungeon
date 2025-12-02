@@ -5,9 +5,9 @@ name: Go
 
 on:
   push:
-    branches: [ "master" ] # Keep the master branch trigger
+    branches: [ "master" ]
     tags:
-      - 'v*' # <-- ADD THIS: Triggers on any tag starting with 'v', like v1.0.0 or v2.3
+      - 'v*' # Triggers on any tag starting with 'v', like v1.0.0 or v2.3
   pull_request:
     branches: [ "master" ]
 
@@ -26,13 +26,12 @@ jobs:
       run: go test -v ./...
 
     - name: Build Executable
-      run: go build -o gobsidian-dungeon ./cmd/myapp
+      # CHANGED: Use '.' to build the package in the current directory (the root)
+      run: go build -o gobsidian-dungeon . 
 
     - name: Upload Tagged Artifact
       uses: actions/upload-artifact@v4
-      if: startsWith(github.ref, 'refs/tags/') # <-- Optional: Only run this step if it was triggered by a tag
+      if: startsWith(github.ref, 'refs/tags/')
       with:
-        name: gobsidian-dungeon-${{ github.ref_name }} 
+        name: gobsidian-dungeon-${{ github.ref_name }}
         path: gobsidian-dungeon
-
-      
