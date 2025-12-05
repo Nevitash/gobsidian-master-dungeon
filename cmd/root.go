@@ -83,7 +83,11 @@ func mergeVault(cmd *cobra.Command, args []string) {
 		return
 	}
 	fmt.Printf("Config %+v\n", config)
-	vault.MergeToFileWithConfig(outputFilePath, config)
+	_, err = vault.MergeToFileWithConfig(outputFilePath, config)
+	if err != nil {
+		fmt.Printf("Error merging vault to file: %v\n", err)
+		return
+	}
 	outputFilePath = filepath.Clean(outputFilePath)
 	outputFilePath, err = filepath.Abs(outputFilePath)
 	if err != nil {
