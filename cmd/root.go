@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"text/template"
 
 	"github.com/Nevitash/gobsidian-master/configuration"
@@ -50,13 +51,13 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().StringVarP(&vaultPath, "vault", "v", "./", "Path to the Obsidian vault")
+	rootCmd.Flags().StringVarP(&vaultPath, "vault", "v", "./vault", "Path to the Obsidian vault")
 	rootCmd.Flags().StringVarP(&outputFilePath, "output", "o", "./merged-vault.md", "Output file name for the merged markdown")
-	rootCmd.Flags().StringArrayVar(&includeFilePatterns, "include-file-patterns", []string{}, "Glob patterns for files to include")
+	rootCmd.Flags().StringArrayVar(&includeFilePatterns, "include-file-patterns", []string{"*.md", "*.txt"}, "Glob patterns for files to include")
 	rootCmd.Flags().StringArrayVar(&excludeFilePatterns, "exclude-file-patterns", []string{"*.png", "*.jpg"}, "Glob patterns for files to exclude")
 	rootCmd.Flags().BoolVarP(&prefixHeadings, "prefix-headings", "p", true, "Prefix headings inside files with an extra #")
 	rootCmd.Flags().StringArrayVar(&includePathPatterns, "include-path-patterns", []string{}, "Glob patterns for paths to include")
-	rootCmd.Flags().StringArrayVar(&excludePathPatterns, "exclude-path-patterns", []string{}, "Glob patterns for paths to exclude")
+	rootCmd.Flags().StringArrayVar(&excludePathPatterns, "exclude-path-patterns", []string{"**/.*", "**/_*"}, "Glob patterns for paths to exclude")
 	rootCmd.Flags().StringVarP(&templatePath, "template-path", "t", "", "Path to custom templates for rendering")
 }
 
@@ -83,5 +84,11 @@ func mergeVault(cmd *cobra.Command, args []string) {
 	}
 	fmt.Printf("Config %+v\n", config)
 	vault.MergeToFileWithConfig(outputFilePath, config)
+	outputFilePath = filepath.Clean(outputFilePath)
+	outputFilePath, err = filepath.Abs(outputFilePath)
+	if err != nil {
+		fmt.Printf("Error getting absolute path for output file: %v\n", err)
+		return
+	}
 	fmt.Printf("Merged vault written to %s\n", outputFilePath)
 }

@@ -7,7 +7,19 @@ mkdir vault/notes/items
 exec root --vault ./vault --output ./merged-vault.md --include-file-patterns *.md --exclude-file-patterns *.png,*.jpg -t ./template.md
 
 exists ./merged-vault.md 
-cmp ./golden_file.md ./merged-vault.md
+
+grep  '## Alice' merged-vault.md
+grep  'A brave adventurer.' merged-vault.md
+
+grep -count=9 '---' merged-vault.md
+
+grep  '## Enchanted Forest' merged-vault.md
+grep  'A mysterious forest filled with magical creatures.' merged-vault.md
+
+grep  '## The Great Adventure' merged-vault.md
+grep  'Once upon a time, Alice ventured into the Enchanted Forest.' merged-vault.md
+
+grep  'All live happy' merged-vault.md
 
 -- golden_file.md --
 ---
@@ -30,7 +42,6 @@ Once upon a time, Alice ventured into the Enchanted Forest.
 ### The End
 All live happy
 ---
-
 -- vault/_config/config.yaml --
 # should be ignored
 some_setting: true

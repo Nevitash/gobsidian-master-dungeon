@@ -3,16 +3,15 @@ module github.com/Nevitash/gobsidian-master-dungeon
 go 1.25.4
 
 require (
+	github.com/Nevitash/gobsidian-master v1.0.3
 	github.com/rogpeppe/go-internal v1.14.1
 	github.com/spf13/cobra v1.10.1
 )
 
 require (
-	github.com/Nevitash/gobsidian-master v1.0.1 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/tools v0.39.0 // indirect
