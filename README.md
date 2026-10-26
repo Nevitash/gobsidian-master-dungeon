@@ -1,4 +1,4 @@
-﻿# Gobsidian Master Dungeon _(gobsidian-master-dungeon)_
+# Gobsidian Master Dungeon _(gobsidian-master-dungeon)_
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
@@ -23,25 +23,25 @@ Game masters and authors maintaining extensive campaign vaults in Obsidian often
 
 Requires Go 1.25 or newer:
 
-`ash
+```bash
 git clone https://github.com/Nevitash/gobsidian-master-dungeon.git
 cd gobsidian-master-dungeon
 go build -o gobsidian-master-dungeon.exe
-`
+```
 
 ## Usage
 
 Basic usage to merge an entire vault:
 
-`ash
+```bash
 ./gobsidian-master-dungeon -v "/path/to/obsidian/vault" -o "./merged-vault.md"
-`
+```
 
 With path filtering and custom templating:
 
-`ash
+```bash
 ./gobsidian-master-dungeon -v "./vault" -o "./dungeon-handout.md" --include-file "*.md" --prefix-headings
-`
+```
 
 ## Maintainers
 
